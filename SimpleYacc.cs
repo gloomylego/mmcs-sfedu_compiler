@@ -4,7 +4,7 @@
 
 // GPPG version 1.3.6
 // Machine:  GOD
-// DateTime: 14.09.2016 23:40:36
+// DateTime: 14.09.2016 23:45:42
 // UserName: Skap
 // Input file <SimpleYacc.y>
 
