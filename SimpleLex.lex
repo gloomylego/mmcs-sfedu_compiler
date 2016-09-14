@@ -23,7 +23,7 @@ ID {Alpha}{AlphaDigit}*
   return (int)Tokens.RNUM;
 }
 
-{ID}  {
+{ID} {
   int res = ScannerHelper.GetIDToken(yytext);
   if (res == (int)Tokens.ID)
 	yylval.sVal = yytext;
@@ -40,7 +40,6 @@ ID {Alpha}{AlphaDigit}*
 "-"  { return (int)Tokens.MINUS; }
 "*"  { return (int)Tokens.MULT; }
 "/"  { return (int)Tokens.DIV; }
-","  { return (int)Tokens.COMMA; }
 "<"  { return (int)Tokens.LS; }
 ">"  { return (int)Tokens.GT; }
 "<=" { return (int)Tokens.LE; }
@@ -68,8 +67,8 @@ public override void yyerror(string format, params object[] args) // обработка с
 
 public void LexError()
 {
-	string errorMsg = string.Format("({0},{1}): Неизвестный символ {2}", yyline, yycol, yytext);
-    throw new LexException(errorMsg);
+  string errorMsg = string.Format("({0},{1}): Неизвестный символ {2}", yyline, yycol, yytext);
+  throw new LexException(errorMsg);
 }
 
 class ScannerHelper
@@ -78,13 +77,11 @@ class ScannerHelper
 
   static ScannerHelper()
   {
-    keywords = new Dictionary<string,int>();
-    keywords.Add("cycle",(int)Tokens.CYCLE);
-	keywords.Add("var",(int)Tokens.VAR);
+	keywords = new Dictionary<string,int>();
+	keywords.Add("cycle",(int)Tokens.CYCLE);
 	keywords.Add("if",(int)Tokens.IF);
 	keywords.Add("then",(int)Tokens.THEN);
 	keywords.Add("else",(int)Tokens.ELSE);
-	keywords.Add("write",(int)Tokens.WRITE);
 	keywords.Add("for",(int)Tokens.FOR);
 	keywords.Add("to",(int)Tokens.TO);
 	keywords.Add("do",(int)Tokens.DO);

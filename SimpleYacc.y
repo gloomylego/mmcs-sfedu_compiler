@@ -54,9 +54,7 @@ stlist	: statement
 statement: assign SEMICOLON
 		| block
 		| cycle
-		| var_id SEMICOLON
 		| if_st
-		| write_st SEMICOLON
 		| for_st
 		| rep_unt
 		| while_st
@@ -85,9 +83,6 @@ rep_unt : REPEAT stlist UNTIL bin_expr
 		;
 
 while_st: WHILE bin_expr DO statement
-		;
-
-write_st: WRITE LBRACE expr RBRACE
 		;
 
 for_st	: FOR assign TO expr DO statement
@@ -119,14 +114,4 @@ in_br	: ident
 		| INUM
 		| LBRACE expr RBRACE
 		;
-
-enum    : ident
-		| assign
-		| enum COMMA ident
-		| enum COMMA assign
-		;
-
-var_id	: VAR enum
-		;
-
 %%
