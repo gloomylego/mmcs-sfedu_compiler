@@ -8,9 +8,13 @@ namespace SimpleLang
     class Implementation
     {
         static public int calculate(Node left, string operation, Node right)
-        {
-            int lValue = left.getValue();
-            int rValue = right.getValue();
+        {   
+            throw new NotImplementedException();
+
+            // TODO: implement me!
+
+            int lValue = 0; // left.getValue();
+            int rValue = 0; // right.getValue();
             switch (operation)
             {
                 case "+":
