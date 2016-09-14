@@ -5,61 +5,74 @@ using System.Text;
 
 namespace SimpleLang
 {
-    abstract public class Node
+    
+    public enum AssignType { Assign, AssignPlus, AssignMinus, AssignMult, AssignDivide };
+
+    public class Node    
     {
-        abstract public int getValue();   
-    };
-
-    public class ExprNode : Node
-    {
-        public ExprNode(int val)
-        {
-            value = val;
-        }
-        public ExprNode(string op, Node l, Node r)
-        {
-            value = null;
-            operation = op;
-            left = l;
-            right = r;
-        }
-
-        public override int getValue()
-        {
-            return value != null ? value.Value : Implementation.calculate(left, operation, right);
-        }
-
-        int? value = null;
-        string operation = null;
-        private Node left = null;
-        private Node right = null;
-
-        
     }
 
-    public class StatementNode : Node
+    public class ExprNode : Node 
     {
-        public override int getValue()
+    }
+
+    public class IdNode : ExprNode
+    {
+        public string Name { get; set; }
+        public IdNode(string name) { Name = name; }
+    }
+
+    public class IntNumNode : ExprNode
+    {
+        public int Num { get; set; }
+        public IntNumNode(int num) { Num = num; }
+    }
+
+    public class BoolNode : ExprNode
+    {
+        public bool Bool { get; set; }
+        public BoolNode(bool flag) { Bool = flag; }
+    }
+
+    public class StatementNode : Node 
+    {
+    }
+
+    public class AssignNode : StatementNode
+    {
+        public IdNode Id { get; set; }
+        public ExprNode Expr { get; set; }
+        public AssignType AssOp { get; set; }
+        public AssignNode(IdNode id, ExprNode expr, AssignType assop = AssignType.Assign)
         {
-            throw new NotImplementedException();
+            Id = id;
+            Expr = expr;
+            AssOp = assop;
         }
     }
 
-    public class BlockNode : Node
+    public class CycleNode : StatementNode
     {
-        public BlockNode(StatementNode statement)
+        public ExprNode Expr { get; set; }
+        public StatementNode Stat { get; set; }
+        public CycleNode(ExprNode expr, StatementNode stat)
         {
-            // TODO
+            Expr = expr;
+            Stat = stat;
+        }
+    }
+
+    public class BlockNode : StatementNode
+    {
+        public List<StatementNode> StList = new List<StatementNode>();
+        public BlockNode(StatementNode stat)
+        {
+            Add(stat);
         }
 
-        public void Add(StatementNode statement)
+        public void Add(StatementNode stat)
         {
-            // TODO
-        }
-
-        public override int getValue()
-        {
-            throw new NotImplementedException();
+            StList.Add(stat);
         }
     }
 }
