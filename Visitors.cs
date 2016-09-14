@@ -11,9 +11,14 @@ namespace SimpleLang
         void Visit(IntNumNode num);
         void Visit(BoolNode binop);
         void Visit(BinaryNode binop);
+        void Visit(BinExprNode binop);
         void Visit(AssignNode assNode);
         void Visit(CycleNode cycNode);
-        void Visit(BlockNode cycNode);
+        void Visit(BlockNode blNode);
+        void Visit(IfNode ifNode);
+        void Visit(ForNode forNode);
+        void Visit(RepUntNode ruNode); 
+        void Visit(WhileNode whNode); 
     }
 
     public class PrettyPrintVisitor : Visitor
@@ -53,6 +58,10 @@ namespace SimpleLang
             binop.right.Accept(this);
             Text += ")";
         }
+        public void Visit(BinExprNode binop)
+        {
+            throw new NotImplementedException();
+        }
         public void Visit(AssignNode a)
         {
             Text += IndentStr();
@@ -85,6 +94,25 @@ namespace SimpleLang
             }
             IndentMinus();
             Text += Environment.NewLine + IndentStr() + "end";
+        }
+        public void Visit(IfNode bl)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Visit(ForNode forNode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Visit(RepUntNode ruNode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Visit(WhileNode whNode)
+        {
+            throw new NotImplementedException();
         }
     }
 

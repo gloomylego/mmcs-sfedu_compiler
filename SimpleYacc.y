@@ -73,10 +73,7 @@ cycle	: CYCLE expr statement
 		;
 
 if_st   : IF expr THEN statement %prec IFX
-		| IF expr THEN statement else_st
-		;
-		
-else_st : ELSE statement
+		| IF expr THEN statement ELSE statement
 		;
 
 rep_unt : REPEAT stlist UNTIL bin_expr

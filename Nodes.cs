@@ -67,6 +67,24 @@ namespace SimpleLang
         }
     }
 
+    // Do we really need this class?
+    public class BinExprNode : ExprNode
+    {
+        public BinExprNode BinExpr { get; set; }
+        public BinSign BinSign { get; set; }
+        public ExprNode Expr { get; set; }
+
+        public BinExprNode(BinExprNode binExpr, BinSign binSign, ExprNode expr)
+        {
+            BinExpr = binExpr;
+            BinSign = binSign;
+            Expr = expr;
+        }
+        public override void Accept(Visitor v)
+        {
+            v.Visit(this);
+        }
+    }
 
     public abstract class StatementNode : Node
     { }
@@ -119,19 +137,6 @@ namespace SimpleLang
         public override void Accept(Visitor v)
         {
             v.Visit(this);
-            //foreach(StatementNode sNode in StList)
-            //    sNode.Accept(v);
-            
-        }
-    }
-
-    public class ElseNode : StatementNode 
-    {
-        public StatementNode Stat { get; set; }
-
-        public ElseNode(StatementNode stat) 
-        {
-            Stat = stat;
         }
     }
 
@@ -139,18 +144,23 @@ namespace SimpleLang
     {
         public ExprNode Condition { get; set; }
         public StatementNode TrueBranch { get; set; }
-        public ElseNode ElseStatement { get; set; }
+        public StatementNode ElseStatement { get; set; }
 
         public IfNode(ExprNode condition, StatementNode trueBranch) 
         {
             Condition = condition;
             TrueBranch = trueBranch;
+            ElseStatement = null;
         }
 
-        public IfNode(ExprNode condition, StatementNode trueBranch, ElseNode elseStatement)
+        public IfNode(ExprNode condition, StatementNode trueBranch, StatementNode elseStatement)
             : this (condition, trueBranch)
         {
             ElseStatement = elseStatement;
+        }
+        public override void Accept(Visitor v)
+        {
+            v.Visit(this);
         }
     }
 
@@ -166,20 +176,9 @@ namespace SimpleLang
             RightLimit = rightLimit;
             DoStat = doStat;
         }
-
-    }
-
-    public class BinExprNode : ExprNode 
-    {
-        public BinExprNode BinExpr  { get; set; }
-        public BinSign BinSign  { get; set; }
-        public ExprNode Expr { get; set; }
-
-        public BinExprNode(BinExprNode binExpr, BinSign binSign, ExprNode expr) 
+        public override void Accept(Visitor v)
         {
-            BinExpr = binExpr;
-            BinSign = binSign;
-            Expr = expr;
+            v.Visit(this);
         }
     }
 
@@ -198,6 +197,10 @@ namespace SimpleLang
             UntilExpr = untilExpr;
             Add(stat);
         }
+        public override void Accept(Visitor v)
+        {
+            v.Visit(this);
+        }
     }
 
     public class WhileNode : StatementNode
@@ -209,6 +212,10 @@ namespace SimpleLang
         {
             Condition = condition;
             Stat = stat;
+        }
+        public override void Accept(Visitor v)
+        {
+            v.Visit(this);
         }
     }
 }
