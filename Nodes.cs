@@ -7,6 +7,7 @@ namespace SimpleLang
 {
     
     public enum AssignType { Assign, AssignPlus, AssignMinus, AssignMult, AssignDivide };
+    public enum BinSign { LS, GT, LE, GE, EQ, NE };
 
     public class Node    
     {
@@ -65,6 +66,7 @@ namespace SimpleLang
     public class BlockNode : StatementNode
     {
         public List<StatementNode> StList = new List<StatementNode>();
+
         public BlockNode(StatementNode stat)
         {
             Add(stat);
@@ -73,6 +75,93 @@ namespace SimpleLang
         public void Add(StatementNode stat)
         {
             StList.Add(stat);
+        }
+    }
+
+    public class ElseNode : StatementNode 
+    {
+        public StatementNode Stat { get; set; }
+
+        public ElseNode(StatementNode stat) 
+        {
+            Stat = stat;
+        }
+    }
+
+    public class IfNode : StatementNode
+    {
+        public ExprNode Condition { get; set; }
+        public StatementNode TrueBranch { get; set; }
+        public ElseNode ElseStatement { get; set; }
+
+        public IfNode(ExprNode condition, StatementNode trueBranch) 
+        {
+            Condition = condition;
+            TrueBranch = trueBranch;
+        }
+
+        public IfNode(ExprNode condition, StatementNode trueBranch, ElseNode elseStatement)
+            : this (condition, trueBranch)
+        {
+            ElseStatement = elseStatement;
+        }
+    }
+
+    public class ForNode : StatementNode 
+    {
+        public AssignNode LeftLimit { get; set; }
+        public ExprNode RightLimit { get; set; }
+        public StatementNode DoStat { get; set; }
+
+        public ForNode(AssignNode leftLimit, ExprNode rightLimit, StatementNode doStat ) 
+        {
+            LeftLimit = leftLimit;
+            RightLimit = rightLimit;
+            DoStat = doStat;
+        }
+
+    }
+
+    public class BinExprNode : ExprNode 
+    {
+        public BinExprNode BinExpr  { get; set; }
+        public BinSign BinSign  { get; set; }
+        public ExprNode Expr { get; set; }
+
+        public BinExprNode(BinExprNode binExpr, BinSign binSign, ExprNode expr) 
+        {
+            BinExpr = binExpr;
+            BinSign = binSign;
+            Expr = expr;
+        }
+    }
+
+    public class RepUntNode : StatementNode 
+    {
+        public List<StatementNode> StList = new List<StatementNode>();
+        public BinExprNode UntilExpr { get; set; }
+
+        public void Add(StatementNode stat)
+        {
+            StList.Add(stat);
+        }
+
+        public RepUntNode(StatementNode stat, BinExprNode untilExpr)
+        {
+            UntilExpr = untilExpr;
+            Add(stat);
+        }
+    }
+
+    public class WhileNode : StatementNode
+    {
+        public BinExprNode Condition { get; set; }
+        public StatementNode Stat { get; set; }
+
+        public WhileNode(BinExprNode condition, StatementNode stat) 
+        {
+            Condition = condition;
+            Stat = stat;
         }
     }
 }
