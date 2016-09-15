@@ -90,7 +90,16 @@ namespace SimpleLang
 
         public void Visit(ForNode forNode)
         {
-            throw new NotImplementedException();
+            Text += Environment.NewLine + IndentStr() + "for";
+            forNode.LeftLimit.Accept(this);
+            Text += "to";
+            forNode.RightLimit.Accept(this);
+
+            Text += Environment.NewLine;
+            IndentPlus();
+            forNode.DoStat.Accept(this);
+            IndentMinus();
+
         }
 
         public void Visit(RepUntNode ruNode)
@@ -105,7 +114,14 @@ namespace SimpleLang
 
         public void Visit(WhileNode whNode)
         {
-            throw new NotImplementedException();
+            Text += Environment.NewLine + IndentStr() + "while ";
+            whNode.Condition.Accept(this);
+
+            Text += Environment.NewLine;
+            IndentPlus();
+            whNode.Stat.Accept(this);
+            IndentMinus();
+
         }
     }
 
