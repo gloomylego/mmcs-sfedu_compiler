@@ -48,6 +48,7 @@ namespace SimpleLang
             Text += " := ";
             a.Expr.Accept(this);
         }
+
         public void Visit(CycleNode c)
         {
             Text += Environment.NewLine + IndentStr() + "cycle ";
@@ -55,6 +56,7 @@ namespace SimpleLang
             Text += Environment.NewLine;
             c.Stat.Accept(this);
         }
+
         public void Visit(BlockNode bl)
         {
             Text += IndentStr() + "begin" + Environment.NewLine;
@@ -74,11 +76,12 @@ namespace SimpleLang
             IndentMinus();
             Text += Environment.NewLine + IndentStr() + "end";
         }
+
         public void Visit(IfNode iNode)
         {
             Text += Environment.NewLine + IndentStr() + "if ";
-            Text += iNode.Condition;
-            Text += "then" + Environment.NewLine;
+            iNode.Condition.Accept(this);
+            Text += " then" + Environment.NewLine;
             IndentPlus();
             iNode.TrueBranch.Accept(this);
             IndentMinus();
