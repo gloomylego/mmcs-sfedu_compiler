@@ -51,7 +51,7 @@ namespace SimpleLang
         public BinSign BinSign { get; set; }
         public ExprNode ExprRight { get; set; }
 
-        public BinExprNode(BinExprNode binExpr, BinSign binSign, ExprNode expr)
+        public BinExprNode(ExprNode binExpr, BinSign binSign, ExprNode expr)
         {
             ExprLeft = binExpr;
             BinSign = binSign;

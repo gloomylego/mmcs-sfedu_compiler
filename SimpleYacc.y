@@ -15,6 +15,7 @@
 		public ExprNode eVal;
 		public StatementNode stVal;
 		public BlockNode blVal;
+		public BinSign bsVal;
 }
 
 //%using ProgramTree
@@ -30,6 +31,7 @@
 %type <eVal> expr ident bin_expr
 %type <stVal> assign statement cycle if_st rep_unt while_st for_st
 %type <blVal> stlist block
+%type <bsVal> bin_sign
 
 %nonassoc IFX
 %nonassoc ELSE
@@ -117,8 +119,10 @@ bin_sign: LS
 		| NE
 		;
 
-bin_expr: expr
-		| bin_expr bin_sign expr
+bin_expr: expr bin_sign expr
+		{
+			$$ = new BinExprNode( $1, $2, $3);
+		}
 		;
 
 expr	: m_d
