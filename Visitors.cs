@@ -10,7 +10,6 @@ namespace SimpleLang
         void Visit(IdNode id);
         void Visit(IntNumNode num);
         void Visit(BoolNode binop);
-        void Visit(BinaryNode binop);
         void Visit(BinExprNode binop);
         void Visit(AssignNode assNode);
         void Visit(CycleNode cycNode);
@@ -26,42 +25,22 @@ namespace SimpleLang
         public string Text = "";
         private int Indent = 0;
 
-        private string IndentStr()
-        {
-            return new string(' ', Indent);
-        }
-        private void IndentPlus()
-        {
-            Indent += 2;
-        }
-        private void IndentMinus()
-        {
-            Indent -= 2;
-        }
-        public void Visit(IdNode id)
-        {
-            Text += id.Name;
-        }
-        public void Visit(IntNumNode num)
-        {
-            Text += num.Num.ToString();
-        }
-        public void Visit(BoolNode binop)
-        {
-            Text += binop.Bool.ToString();
-        }
-        public void Visit(BinaryNode binop)
-        {
-            Text += "(";
-            binop.left.Accept(this);
-            Text += " " + binop.operation + " ";
-            binop.right.Accept(this);
-            Text += ")";
-        }
+        private string IndentStr() { return new string(' ', Indent); }
+        private void IndentPlus() { Indent += 2; }
+        private void IndentMinus() { Indent -= 2; }
+        public void Visit(IdNode id) { Text += id.Name; }
+        public void Visit(IntNumNode num) { Text += num.Num.ToString(); }
+        public void Visit(BoolNode binop) { Text += binop.Bool.ToString(); }
+
         public void Visit(BinExprNode binop)
         {
-            throw new NotImplementedException();
+            Text += "(";
+            binop.ExprLeft.Accept(this);
+            Text += " " + binop.BinSign + " ";
+            binop.ExprRight.Accept(this);
+            Text += ")";
         }
+
         public void Visit(AssignNode a)
         {
             Text += IndentStr();

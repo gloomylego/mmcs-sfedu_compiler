@@ -45,34 +45,17 @@ namespace SimpleLang
         public override void Accept(Visitor v) { v.Visit(this); }
     }
 
-    public class BinaryNode : ExprNode
-    {
-        public ExprNode left { get; set; }
-        public ExprNode right { get; set; }
-        public string operation { get; set; }
-
-        public BinaryNode(ExprNode lhs, ExprNode rhs, string op)
-        {
-            left = lhs;
-            right = rhs;
-            operation = op;
-        }
-
-        public override void Accept(Visitor v) { v.Visit(this); }
-    }
-
-    // Do we really need this class?
     public class BinExprNode : ExprNode
     {
-        public BinExprNode BinExpr { get; set; }
+        public ExprNode ExprLeft { get; set; }
         public BinSign BinSign { get; set; }
-        public ExprNode Expr { get; set; }
+        public ExprNode ExprRight { get; set; }
 
         public BinExprNode(BinExprNode binExpr, BinSign binSign, ExprNode expr)
         {
-            BinExpr = binExpr;
+            ExprLeft = binExpr;
             BinSign = binSign;
-            Expr = expr;
+            ExprRight = expr;
         }
 
         public override void Accept(Visitor v) { v.Visit(this); }
