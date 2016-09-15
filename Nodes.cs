@@ -90,6 +90,12 @@ public enum BinSign
     public abstract class StatementNode : Node
     { }
 
+    // auxiliary Node for code gen
+    public class EmptyNode : StatementNode 
+    {
+        public override void Accept(Visitor v) { /* do nothing */ }
+    }
+
     public class AssignNode : StatementNode
     {
         public IdNode Id { get; set; }

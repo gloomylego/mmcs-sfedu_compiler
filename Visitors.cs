@@ -67,7 +67,7 @@ namespace SimpleLang
             for (var i = 1; i < Count; i++)
             {
                 Text += ';';
-                if (!(bl.StList[i] is /*EmptyNode /*what is it?*/ StatementNode))
+                if (!(bl.StList[i] is EmptyNode))
                     Text += Environment.NewLine;
                 bl.StList[i].Accept(this);
             }
