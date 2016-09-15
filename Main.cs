@@ -19,11 +19,15 @@ namespace SimpleCompiler
                 scanner.SetSource(Text, 0);
             
                 Parser parser = new Parser(scanner);
-                      
-                var b = parser.Parse();
-                if (!b)
-		            Console.WriteLine("Ошибка");
-                else Console.WriteLine("Программа распознана");
+
+                  var b = parser.Parse();
+                //  if (!b)
+                //Console.WriteLine("Ошибка");
+                //  else Console.WriteLine("Программа распознана");
+                var prettyVisitor = new SimpleLang.PrettyPrintVisitor();
+
+                parser.root.Accept(prettyVisitor);
+                Console.WriteLine(prettyVisitor.Text);
             }
             catch (FileNotFoundException)
             {

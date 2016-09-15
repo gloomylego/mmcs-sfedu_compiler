@@ -22,8 +22,8 @@
 
 %namespace SimpleParser
 
-%token BEGIN END CYCLE INUM RNUM ASSIGN SEMICOLON LBRACE RBRACE PLUS MINUS MULT DIV COMMA IF THEN ELSE FOR TO DO REPEAT UNTIL WHILE
-%token <bsVal> LS GT LE GE EQ NE
+%token BEGIN END CYCLE ASSIGN SEMICOLON LBRACE RBRACE PLUS MINUS MULT DIV COMMA IF THEN ELSE FOR TO DO REPEAT UNTIL WHILE
+%token <bsVal> LS GT LE GE EQ NE PLUS MINUS MULT DIV
 %token <iVal> INUM
 %token <dVal> RNUM
 %token <sVal> ID
@@ -42,10 +42,7 @@
 progr   : block { root = $1; }
 		;
 
-stlist	: statement
-		{
-			$$ = new BlockNode($1);
-		}
+stlist	: statement{ $$ = new BlockNode($1); }
 		| stlist statement
 		{
 			$1.Add($2);
@@ -53,117 +50,64 @@ stlist	: statement
 		}
 		;
 
-statement: assign SEMICOLON
-		| block
-		| cycle
-		| if_st
-		| for_st
-		| rep_unt
-		| while_st
+statement: assign SEMICOLON { $$ = $1; }
+		| block { $$ = $1; }
+		| cycle { $$ = $1; }
+		| if_st { $$ = $1; }
+		| for_st { $$ = $1; }
+		| rep_unt { $$ = $1; }
+		| while_st { $$ = $1; }
 		;
 
-ident 	: ID
-		{
-			$$ = new IdNode($1);
-		}
+ident 	: ID { $$ = new IdNode($1); }
 		;
 	
-assign 	: ident ASSIGN expr
-		{
-			$$ = new AssignNode($1 as IdNode, $3);
-		}
+assign 	: ident ASSIGN expr { $$ = new AssignNode($1 as IdNode, $3); }
 		;
 
-block	: BEGIN stlist END
-		{
-			$$ = $2;
-		}
+block	: BEGIN stlist END { $$ = $2; }
 		;
 
-cycle	: CYCLE expr statement
-		{
-			$$ = new CycleNode($2, $3);
-		}
+cycle	: CYCLE expr statement { $$ = new CycleNode($2, $3); }
 		;
 
-if_st   : IF expr THEN statement %prec IFX
-		{
-			$$ = new IfNode($2, $4);
-		}
-		| IF expr THEN statement ELSE statement
-		{
-			$$ = new IfNode($2, $4, $6);
-		}
+if_st   : IF expr THEN statement %prec IFX { $$ = new IfNode($2, $4); }
+		| IF expr THEN statement ELSE statement { $$ = new IfNode($2, $4, $6); }
 		;
 
-rep_unt : REPEAT stlist UNTIL bin_expr
-		{
-			$$ = new RepUntNode($2, $4 as BinExprNode);
-		}
+rep_unt : REPEAT stlist UNTIL bin_expr { $$ = new RepUntNode($2, $4 as BinExprNode); }
 		;
 
-while_st: WHILE bin_expr DO statement
-		{
-			$$ = new WhileNode($2 as BinExprNode, $4);
-		}
+while_st: WHILE bin_expr DO statement { $$ = new WhileNode($2 as BinExprNode, $4); }
 		;
 
-for_st	: FOR assign TO expr DO statement
-		{
-			$$ = new ForNode($2 as AssignNode, $4, $6);
-		}
+for_st	: FOR assign TO expr DO statement { $$ = new ForNode($2 as AssignNode, $4, $6); }
 		;
 
-bin_sign: LS
-		{
-			$$ = $1;
-		}
-		| GT
-		{
-			$$ = $1;
-		}
-		| LE
-		{
-			$$ = $1;
-		}
-		| GE
-		{
-			$$ = $1;
-		}
-		| EQ
-		{
-			$$ = $1;
-		}
-		| NE
-		{
-			$$ = $1;
-		}
+bin_sign: LS { $$ = BinSign.LS; }
+		| GT { $$ = BinSign.GT; }
+		| LE { $$ = BinSign.LE; }
+		| GE { $$ = BinSign.GE; }
+		| EQ { $$ = BinSign.EQ; }
+		| NE { $$ = BinSign.NE; }
 		;
 
-bin_expr: expr bin_sign expr
-		{
-			$$ = new BinExprNode($1, $2, $3);
-		}
+
+bin_expr: expr bin_sign expr { $$ = new BinExprNode($1, $2, $3); }
 		;
 
-expr	: m_d
-		| expr PLUS m_d
-		| expr MINUS m_d
+expr	: m_d { $$ = $1; }
+		| expr PLUS m_d { $$ = new BinExprNode($1, BinSign.PLUS, $3); }
+		| expr MINUS m_d { $$ = new BinExprNode($1, BinSign.MINUS, $3); }
 		;
 
-m_d		: in_br
-		| m_d MULT in_br
-		| m_d DIV in_br
+m_d		: in_br { $$ = $1; }
+		| m_d MULT in_br { $$ = new BinExprNode($1, BinSign.MULT, $3); }
+		| m_d DIV in_br { $$ = new BinExprNode($1, BinSign.DIV, $3); }
 		;
 // priority
-in_br	: ident
-		{
-			$$ = $1 as IdNode;
-		}
-		| INUM
-		{
-			$$ = new IntNumNode($1);
-		}
-		| LBRACE expr RBRACE
+in_br	: ident { $$ = $1 as IdNode; }
+		| INUM { $$ = new IntNumNode($1); }
+		| LBRACE expr RBRACE { $$ = $2; }
 		;
 %%

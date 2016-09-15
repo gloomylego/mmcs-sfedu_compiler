@@ -36,7 +36,7 @@ namespace SimpleLang
         {
             Text += "(";
             binop.ExprLeft.Accept(this);
-            Text += " " + binop.BinSign + " ";
+            Text += " " + binop.BinSign.Description() + " ";
             binop.ExprRight.Accept(this);
             Text += ")";
         }
@@ -50,7 +50,7 @@ namespace SimpleLang
         }
         public void Visit(CycleNode c)
         {
-            Text += IndentStr() + "cycle ";
+            Text += Environment.NewLine + IndentStr() + "cycle ";
             c.Expr.Accept(this);
             Text += Environment.NewLine;
             c.Stat.Accept(this);
@@ -74,9 +74,18 @@ namespace SimpleLang
             IndentMinus();
             Text += Environment.NewLine + IndentStr() + "end";
         }
-        public void Visit(IfNode bl)
+        public void Visit(IfNode iNode)
         {
-            throw new NotImplementedException();
+            Text += Environment.NewLine + IndentStr() + "if ";
+            Text += iNode.Condition;
+            Text += "then" + Environment.NewLine;
+            IndentPlus();
+            iNode.TrueBranch.Accept(this);
+            IndentMinus();
+            Text += Environment.NewLine + IndentStr() + "else" + Environment.NewLine;
+            IndentPlus();
+            iNode.ElseStatement.Accept(this);
+            IndentMinus();
         }
 
         public void Visit(ForNode forNode)
@@ -86,7 +95,12 @@ namespace SimpleLang
 
         public void Visit(RepUntNode ruNode)
         {
-            throw new NotImplementedException();
+            Text += Environment.NewLine + IndentStr() + "repeat" + Environment.NewLine;
+            IndentPlus();
+            ruNode.StNode.Accept(this);
+            IndentMinus();
+            Text += Environment.NewLine + IndentStr() + "until ";
+            ruNode.UntilExpr.Accept(this);
         }
 
         public void Visit(WhileNode whNode)

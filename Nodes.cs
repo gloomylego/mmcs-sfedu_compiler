@@ -2,12 +2,38 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.ComponentModel;
 
 namespace SimpleLang
 {
     
     public enum AssignType { Assign, AssignPlus, AssignMinus, AssignMult, AssignDivide };
-    public enum BinSign { LS, GT, LE, GE, EQ, NE };
+
+    
+
+public enum BinSign
+    {
+        [Description("<")]
+        LS,
+        [Description(">")]
+        GT,
+        [Description("<=")]
+        LE,
+        [Description(">=")]
+        GE,
+        [Description("==")]
+        EQ,
+        [Description("!=")]
+        NE,
+        [Description("+")]
+        PLUS,
+        [Description("-")]
+        MINUS,
+        [Description("*")]
+        MULT,
+        [Description("/")]
+        DIV
+    }
 
     public abstract class Node
     {
@@ -156,23 +182,12 @@ namespace SimpleLang
 
     public class RepUntNode : StatementNode 
     {
-        public List<StatementNode> StList = new List<StatementNode>();
+        public StatementNode StNode;
         public BinExprNode UntilExpr { get; set; }
-
-        public void Add(StatementNode stat)
+        
+        public RepUntNode(StatementNode stList, BinExprNode untilExpr)
         {
-            StList.Add(stat);
-        }
-
-        public RepUntNode(StatementNode stat, BinExprNode untilExpr)
-        {
-            UntilExpr = untilExpr;
-            Add(stat);
-        }
-
-        public RepUntNode(List<StatementNode> stList, BinExprNode untilExpr)
-        {
-            StList = stList;
+            StNode = stList;
             UntilExpr = untilExpr;
         }
 

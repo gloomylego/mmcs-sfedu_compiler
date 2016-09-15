@@ -14,10 +14,9 @@
 		b := 0;
 		yep := 2;
 	}
-  }
-  repeat
+	
+	repeat
 	k := 2*3 + 2*k;	
-  until k < 1000
-  while 5 = 2 + 3 do k := 1 + 2;
-
+	until k < 1000
+  }
 }
