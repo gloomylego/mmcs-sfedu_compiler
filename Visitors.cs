@@ -48,6 +48,7 @@ namespace SimpleLang
             Text += " := ";
             a.Expr.Accept(this);
         }
+
         public void Visit(CycleNode c)
         {
             Text += Environment.NewLine + IndentStr() + "cycle ";
@@ -55,6 +56,7 @@ namespace SimpleLang
             Text += Environment.NewLine;
             c.Stat.Accept(this);
         }
+
         public void Visit(BlockNode bl)
         {
             Text += IndentStr() + "begin" + Environment.NewLine;
@@ -67,18 +69,19 @@ namespace SimpleLang
             for (var i = 1; i < Count; i++)
             {
                 Text += ';';
-                if (!(bl.StList[i] is /*EmptyNode /*what is it?*/ StatementNode))
+                if (!(bl.StList[i] is EmptyNode))
                     Text += Environment.NewLine;
                 bl.StList[i].Accept(this);
             }
             IndentMinus();
             Text += Environment.NewLine + IndentStr() + "end";
         }
+
         public void Visit(IfNode iNode)
         {
             Text += Environment.NewLine + IndentStr() + "if ";
-            Text += iNode.Condition;
-            Text += "then" + Environment.NewLine;
+            iNode.Condition.Accept(this);
+            Text += " then" + Environment.NewLine;
             IndentPlus();
             iNode.TrueBranch.Accept(this);
             IndentMinus();
@@ -90,7 +93,16 @@ namespace SimpleLang
 
         public void Visit(ForNode forNode)
         {
-            throw new NotImplementedException();
+            Text += Environment.NewLine + IndentStr() + "for";
+            forNode.LeftLimit.Accept(this);
+            Text += "to";
+            forNode.RightLimit.Accept(this);
+
+            Text += Environment.NewLine;
+            IndentPlus();
+            forNode.DoStat.Accept(this);
+            IndentMinus();
+
         }
 
         public void Visit(RepUntNode ruNode)
@@ -105,7 +117,14 @@ namespace SimpleLang
 
         public void Visit(WhileNode whNode)
         {
-            throw new NotImplementedException();
+            Text += Environment.NewLine + IndentStr() + "while ";
+            whNode.Condition.Accept(this);
+
+            Text += Environment.NewLine;
+            IndentPlus();
+            whNode.Stat.Accept(this);
+            IndentMinus();
+
         }
     }
 
