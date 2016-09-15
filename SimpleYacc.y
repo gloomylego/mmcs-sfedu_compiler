@@ -22,13 +22,13 @@
 
 %namespace SimpleParser
 
-%token BEGIN END CYCLE INUM RNUM ID ASSIGN SEMICOLON LBRACE RBRACE PLUS MINUS MULT DIV VAR COMMA IF THEN ELSE WRITE FOR TO DO REPEAT UNTIL WHILE
-%token LS GT LE GE EQ NE
+%token BEGIN END CYCLE INUM RNUM ASSIGN SEMICOLON LBRACE RBRACE PLUS MINUS MULT DIV COMMA IF THEN ELSE FOR TO DO REPEAT UNTIL WHILE
+%token <bsVal> LS GT LE GE EQ NE
 %token <iVal> INUM
 %token <dVal> RNUM
 %token <sVal> ID
 
-%type <eVal> expr ident bin_expr
+%type <eVal> expr ident bin_expr in_br m_d
 %type <stVal> assign statement cycle if_st rep_unt while_st for_st
 %type <blVal> stlist block
 %type <bsVal> bin_sign
@@ -63,6 +63,9 @@ statement: assign SEMICOLON
 		;
 
 ident 	: ID
+		{
+			$$ = new IdNode($1);
+		}
 		;
 	
 assign 	: ident ASSIGN expr
@@ -112,16 +115,34 @@ for_st	: FOR assign TO expr DO statement
 		;
 
 bin_sign: LS
+		{
+			$$ = $1;
+		}
 		| GT
+		{
+			$$ = $1;
+		}
 		| LE
+		{
+			$$ = $1;
+		}
 		| GE
+		{
+			$$ = $1;
+		}
 		| EQ
+		{
+			$$ = $1;
+		}
 		| NE
+		{
+			$$ = $1;
+		}
 		;
 
 bin_expr: expr bin_sign expr
 		{
-			$$ = new BinExprNode( $1, $2, $3);
+			$$ = new BinExprNode($1, $2, $3);
 		}
 		;
 
@@ -134,9 +155,15 @@ m_d		: in_br
 		| m_d MULT in_br
 		| m_d DIV in_br
 		;
-
+// priority
 in_br	: ident
+		{
+			$$ = $1 as IdNode;
+		}
 		| INUM
+		{
+			$$ = new IntNumNode($1);
+		}
 		| LBRACE expr RBRACE
 		;
 %%
