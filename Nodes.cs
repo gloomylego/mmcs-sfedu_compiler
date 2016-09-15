@@ -21,31 +21,28 @@ namespace SimpleLang
     public class IdNode : ExprNode
     {
         public string Name { get; set; }
+
         public IdNode(string name) { Name = name; }
-        public override void Accept(Visitor v)
-        {
-            v.Visit(this);
-        }
+
+        public override void Accept(Visitor v) { v.Visit(this); }
     }
 
     public class IntNumNode : ExprNode
     {
         public int Num { get; set; }
+
         public IntNumNode(int num) { Num = num; }
-        public override void Accept(Visitor v)
-        {
-            v.Visit(this);
-        }
+
+        public override void Accept(Visitor v) { v.Visit(this); }
     }
 
     public class BoolNode : ExprNode
     {
         public bool Bool { get; set; }
+
         public BoolNode(bool flag) { Bool = flag; }
-        public override void Accept(Visitor v)
-        {
-            v.Visit(this);
-        }
+
+        public override void Accept(Visitor v) { v.Visit(this); }
     }
 
     public class BinaryNode : ExprNode
@@ -53,18 +50,15 @@ namespace SimpleLang
         public ExprNode left { get; set; }
         public ExprNode right { get; set; }
         public string operation { get; set; }
+
         public BinaryNode(ExprNode lhs, ExprNode rhs, string op)
         {
             left = lhs;
             right = rhs;
             operation = op;
         }
-        public override void Accept(Visitor v)
-        {
-            left.Accept(v);
-            right.Accept(v);
-            v.Visit(this);
-        }
+
+        public override void Accept(Visitor v) { v.Visit(this); }
     }
 
     // Do we really need this class?
@@ -80,10 +74,8 @@ namespace SimpleLang
             BinSign = binSign;
             Expr = expr;
         }
-        public override void Accept(Visitor v)
-        {
-            v.Visit(this);
-        }
+
+        public override void Accept(Visitor v) { v.Visit(this); }
     }
 
     public abstract class StatementNode : Node
@@ -94,31 +86,29 @@ namespace SimpleLang
         public IdNode Id { get; set; }
         public ExprNode Expr { get; set; }
         public AssignType AssOp { get; set; }
+
         public AssignNode(IdNode id, ExprNode expr, AssignType assop = AssignType.Assign)
         {
             Id = id;
             Expr = expr;
             AssOp = assop;
         }
-        public override void Accept(Visitor v)
-        {
-            v.Visit(this);
-        }
+
+        public override void Accept(Visitor v) { v.Visit(this); }
     }
 
     public class CycleNode : StatementNode
     {
         public ExprNode Expr { get; set; }
         public StatementNode Stat { get; set; }
+
         public CycleNode(ExprNode expr, StatementNode stat)
         {
             Expr = expr;
             Stat = stat;
         }
-        public override void Accept(Visitor v)
-        {
-            v.Visit(this);
-        }
+
+        public override void Accept(Visitor v) { v.Visit(this); }
     }
 
     public class BlockNode : StatementNode
@@ -130,14 +120,17 @@ namespace SimpleLang
             Add(stat);
         }
 
+        public BlockNode(List<StatementNode> statList)
+        {
+            StList = statList;
+        }
+
         public void Add(StatementNode stat)
         {
             StList.Add(stat);
         }
-        public override void Accept(Visitor v)
-        {
-            v.Visit(this);
-        }
+
+        public override void Accept(Visitor v) { v.Visit(this); }
     }
 
     public class IfNode : StatementNode
@@ -158,10 +151,8 @@ namespace SimpleLang
         {
             ElseStatement = elseStatement;
         }
-        public override void Accept(Visitor v)
-        {
-            v.Visit(this);
-        }
+
+        public override void Accept(Visitor v) { v.Visit(this); }
     }
 
     public class ForNode : StatementNode 
@@ -176,10 +167,8 @@ namespace SimpleLang
             RightLimit = rightLimit;
             DoStat = doStat;
         }
-        public override void Accept(Visitor v)
-        {
-            v.Visit(this);
-        }
+
+        public override void Accept(Visitor v) { v.Visit(this); }
     }
 
     public class RepUntNode : StatementNode 
@@ -197,10 +186,14 @@ namespace SimpleLang
             UntilExpr = untilExpr;
             Add(stat);
         }
-        public override void Accept(Visitor v)
+
+        public RepUntNode(List<StatementNode> stList, BinExprNode untilExpr)
         {
-            v.Visit(this);
+            StList = stList;
+            UntilExpr = untilExpr;
         }
+
+        public override void Accept(Visitor v) { v.Visit(this); }
     }
 
     public class WhileNode : StatementNode
@@ -213,9 +206,7 @@ namespace SimpleLang
             Condition = condition;
             Stat = stat;
         }
-        public override void Accept(Visitor v)
-        {
-            v.Visit(this);
-        }
+
+        public override void Accept(Visitor v) { v.Visit(this); }
     }
 }

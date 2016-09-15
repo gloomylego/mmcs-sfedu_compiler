@@ -27,8 +27,8 @@
 %token <dVal> RNUM
 %token <sVal> ID
 
-%type <eVal> expr ident
-%type <stVal> assign statement cycle
+%type <eVal> expr ident bin_expr
+%type <stVal> assign statement cycle if_st rep_unt while_st for_st
 %type <blVal> stlist block
 
 %nonassoc IFX
@@ -64,25 +64,49 @@ ident 	: ID
 		;
 	
 assign 	: ident ASSIGN expr
+		{
+			$$ = new AssignNode($1 as IdNode, $3);
+		}
 		;
 
 block	: BEGIN stlist END
+		{
+			$$ = $2;
+		}
 		;
 
 cycle	: CYCLE expr statement
+		{
+			$$ = new CycleNode($2, $3);
+		}
 		;
 
 if_st   : IF expr THEN statement %prec IFX
+		{
+			$$ = new IfNode($2, $4);
+		}
 		| IF expr THEN statement ELSE statement
+		{
+			$$ = new IfNode($2, $4, $6);
+		}
 		;
 
 rep_unt : REPEAT stlist UNTIL bin_expr
+		{
+			$$ = new RepUntNode($2, $4 as BinExprNode);
+		}
 		;
 
 while_st: WHILE bin_expr DO statement
+		{
+			$$ = new WhileNode($2 as BinExprNode, $4);
+		}
 		;
 
 for_st	: FOR assign TO expr DO statement
+		{
+			$$ = new ForNode($2 as AssignNode, $4, $6);
+		}
 		;
 
 bin_sign: LS
