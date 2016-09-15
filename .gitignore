@@ -1,3 +1,5 @@
 bin/
 .vs/
 obj/
+SimpleYacc.cs
+SimpleLex.cs
