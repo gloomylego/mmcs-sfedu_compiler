@@ -87,7 +87,7 @@ namespace SimpleLang
             IndentMinus();
             Text += Environment.NewLine + IndentStr() + "else" + Environment.NewLine;
             IndentPlus();
-            iNode.ElseStatement.Accept(this);
+            iNode.ElseBranch.Accept(this);
             IndentMinus();
         }
 

@@ -24,10 +24,12 @@ namespace SimpleCompiler
                 //  if (!b)
                 //Console.WriteLine("Ошибка");
                 //  else Console.WriteLine("Программа распознана");
-                var prettyVisitor = new SimpleLang.PrettyPrintVisitor();
-
-                parser.root.Accept(prettyVisitor);
-                Console.WriteLine(prettyVisitor.Text);
+                //var prettyVisitor = new SimpleLang.PrettyPrintVisitor();
+                //parser.root.Accept(prettyVisitor);
+                //Console.WriteLine(prettyVisitor.Text);
+                var linearCode = new SimpleLang.LinearCode();
+                parser.root.Accept(linearCode);
+                Console.WriteLine(linearCode.toString());
             }
             catch (FileNotFoundException)
             {

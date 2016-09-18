@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementation.cs" />
+    <Compile Include="LinearCode.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Nodes.cs" />
     <Compile Include="ParserHelper.cs" />

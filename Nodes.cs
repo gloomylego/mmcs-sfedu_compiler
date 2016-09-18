@@ -6,12 +6,9 @@ using System.ComponentModel;
 
 namespace SimpleLang
 {
-    
     public enum AssignType { Assign, AssignPlus, AssignMinus, AssignMult, AssignDivide };
-
     
-
-public enum BinSign
+    public enum BinSign
     {
         [Description("<")]
         LS,
@@ -152,19 +149,19 @@ public enum BinSign
     {
         public ExprNode Condition { get; set; }
         public StatementNode TrueBranch { get; set; }
-        public StatementNode ElseStatement { get; set; }
+        public StatementNode ElseBranch { get; set; }
 
         public IfNode(ExprNode condition, StatementNode trueBranch) 
         {
             Condition = condition;
             TrueBranch = trueBranch;
-            ElseStatement = null;
+            ElseBranch = null;
         }
 
         public IfNode(ExprNode condition, StatementNode trueBranch, StatementNode elseStatement)
             : this (condition, trueBranch)
         {
-            ElseStatement = elseStatement;
+            ElseBranch = elseStatement;
         }
 
         public override void Accept(Visitor v) { v.Visit(this); }
@@ -189,7 +186,7 @@ public enum BinSign
     public class RepUntNode : StatementNode 
     {
         public StatementNode StNode;
-        public BinExprNode UntilExpr { get; set; }
+        public ExprNode UntilExpr { get; set; }
         
         public RepUntNode(StatementNode stList, BinExprNode untilExpr)
         {
@@ -202,10 +199,10 @@ public enum BinSign
 
     public class WhileNode : StatementNode
     {
-        public BinExprNode Condition { get; set; }
+        public ExprNode Condition { get; set; }
         public StatementNode Stat { get; set; }
 
-        public WhileNode(BinExprNode condition, StatementNode stat) 
+        public WhileNode(ExprNode condition, StatementNode stat) 
         {
             Condition = condition;
             Stat = stat;

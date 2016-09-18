@@ -2,21 +2,22 @@
   b := 2;
   a := 3;
   a := b;
-  cycle 3
+  c:= b + 2;
+  d:= a * b + c * d + 3;
+  if 1 then 
+	b := 1;
+  else
   {
-    a := c;
-    c := 1;
-	t := a + 2 * (e);
-	if 1 then 
-		b := 1;
-	else
-	{
-		b := 0;
-		yep := 2;
-	}
-	
-	repeat
-	k := 2*3 + 2*k;	
-	until k < 1000
+    b := 0;
+    yep := 2;
+  }
+  
+  if a then
+	a := 1;
+  b := 2;
+  
+  while x do
+  {
+	x := x + 1;
   }
 }

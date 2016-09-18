@@ -13,33 +13,33 @@ namespace SimpleLang
 
             // TODO: implement me!
 
-            int lValue = 0; // left.getValue();
-            int rValue = 0; // right.getValue();
-            switch (operation)
-            {
-                case "+":
-                    return lValue + rValue;
-                case "-":
-                    return lValue - rValue;
-                case "*":
-                    return lValue * rValue;
-                case "/":
-                    return lValue / rValue;
-                case "<":
-                    return Convert.ToInt32(lValue < rValue);
-                case "<=":
-                    return Convert.ToInt32(lValue <= rValue);
-                case ">":
-                    return Convert.ToInt32(lValue > rValue);
-                case ">=":
-                    return Convert.ToInt32(lValue >= rValue);
-                case "=":
-                    return Convert.ToInt32(lValue == rValue);
-                case "!=":
-                    return Convert.ToInt32(lValue != rValue);
-                default:
-                    throw new NotImplementedException();
-            }
+            //        int lValue = 0; // left.getValue();
+            //        int rValue = 0; // right.getValue();
+            //        switch (operation)
+            //        {
+            //            case "+":
+            //                return lValue + rValue;
+            //            case "-":
+            //                return lValue - rValue;
+            //            case "*":
+            //                return lValue * rValue;
+            //            case "/":
+            //                return lValue / rValue;
+            //            case "<":
+            //                return Convert.ToInt32(lValue < rValue);
+            //            case "<=":
+            //                return Convert.ToInt32(lValue <= rValue);
+            //            case ">":
+            //                return Convert.ToInt32(lValue > rValue);
+            //            case ">=":
+            //                return Convert.ToInt32(lValue >= rValue);
+            //            case "=":
+            //                return Convert.ToInt32(lValue == rValue);
+            //            case "!=":
+            //                return Convert.ToInt32(lValue != rValue);
+            //            default:
+            //                throw new NotImplementedException();
+            //        }
         }
     }
 }
