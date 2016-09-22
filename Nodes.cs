@@ -171,13 +171,13 @@ namespace SimpleLang
     {
         public AssignNode LeftLimit { get; set; }
         public ExprNode RightLimit { get; set; }
-        public StatementNode DoStat { get; set; }
+        public StatementNode BodyStatement { get; set; }
 
         public ForNode(AssignNode leftLimit, ExprNode rightLimit, StatementNode doStat ) 
         {
             LeftLimit = leftLimit;
             RightLimit = rightLimit;
-            DoStat = doStat;
+            BodyStatement = doStat;
         }
 
         public override void Accept(Visitor v) { v.Visit(this); }

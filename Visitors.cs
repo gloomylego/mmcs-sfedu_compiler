@@ -100,7 +100,7 @@ namespace SimpleLang
 
             Text += Environment.NewLine;
             IndentPlus();
-            forNode.DoStat.Accept(this);
+            forNode.BodyStatement.Accept(this);
             IndentMinus();
 
         }

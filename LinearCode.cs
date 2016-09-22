@@ -42,7 +42,14 @@ namespace SimpleLang
 
         public override string toString() { return label; }
     }
-    
+
+    //LS,
+    //GT,
+    //LE,
+    //GE,
+    //EQ,
+    //NE,
+
     public enum Operation {
         NoOp,
         Assign,
@@ -50,6 +57,7 @@ namespace SimpleLang
         Minus,
         Mult,
         Div,
+        Less,
         Goto,
         CondGoto,
         LabelOp
@@ -70,6 +78,7 @@ namespace SimpleLang
             { Operation.Minus, "{0} := {1} - {2}" },
             { Operation.Mult, "{0} := {1} * {2}" },
             { Operation.Div, "{0} := {1} / {2}" },
+            { Operation.Less, "{0} := {1} < {2}" },
             { Operation.Goto, "goto {0}" },
             { Operation.CondGoto, "if {1} goto {0}" },
             { Operation.LabelOp, "{0}:" }
@@ -101,7 +110,7 @@ namespace SimpleLang
     // TODO: WTF EmptyNode ??
     public class LinearCode : Visitor
     {
-        private static readonly string s_constantPrefix = "$";
+        private static readonly string s_constantPrefix = "$t";
         private static readonly string s_labelPrefix = "%l";
 
         // TODO: Add rest nonimplemented BinSign's operations
@@ -110,7 +119,8 @@ namespace SimpleLang
             { BinSign.PLUS, Operation.Plus },
             { BinSign.MINUS, Operation.Minus },
             { BinSign.MULT, Operation.Mult },
-            { BinSign.DIV, Operation.Div }
+            { BinSign.DIV, Operation.Div },
+            { BinSign.LS, Operation.Less }
         };
 
         private int valueCounter = 0;
@@ -119,7 +129,7 @@ namespace SimpleLang
         private Value idOrNum; // LinearCode saves result in this value
 
         public List<LinearRepresentation> code = new List<LinearRepresentation>();
-        public List<LinearRepresentation> evaluatedExpression = new List<LinearRepresentation>();
+        private List<LinearRepresentation> evaluatedExpression = new List<LinearRepresentation>();
 
         private static Operation binSignToOp(BinSign bs)
         {
@@ -133,7 +143,7 @@ namespace SimpleLang
         }
         // combines if and loop statements
         private void branchCondition(ExprNode condition, StatementNode trueBranch, StatementNode falseBranch,
-            Label beginCycle = null)
+            List<LinearRepresentation> addBeforeEndLabel = null)
         {
             condition.Accept(this);
             Label trueCond = new Label(s_labelPrefix + labelCounter++);
@@ -141,6 +151,7 @@ namespace SimpleLang
 
             LinearRepresentation gotoCond = new LinearRepresentation(Operation.CondGoto, trueCond, idOrNum);
             evaluatedExpression.Add(gotoCond);
+            moveExpressionToCode();
             if (falseBranch != null)
             {
                 falseBranch.Accept(this);
@@ -150,9 +161,9 @@ namespace SimpleLang
             moveExpressionToCode();
 
             trueBranch.Accept(this);
-            if (beginCycle != null)
+            if (addBeforeEndLabel != null)
             {
-                evaluatedExpression.Add(new LinearRepresentation(Operation.Goto, beginCycle));
+                evaluatedExpression.AddRange(addBeforeEndLabel);
             }
             evaluatedExpression.Add(new LinearRepresentation(Operation.LabelOp, endCond));
             moveExpressionToCode();
@@ -210,7 +221,7 @@ namespace SimpleLang
         }
         public void Visit(CycleNode cycNode)
         {
-
+            
         }
         public void Visit(BlockNode blNode)
         {
@@ -225,17 +236,30 @@ namespace SimpleLang
         }
         public void Visit(ForNode forNode)
         {
+            Label beginLabel = new Label(s_labelPrefix + labelCounter++);
+            var beforeEnd = new List<LinearRepresentation>();
+            forNode.LeftLimit.Id.Accept(this);
+            beforeEnd.Add(new LinearRepresentation(Operation.Plus, idOrNum, idOrNum, new Number(1)));
+            beforeEnd.Add(new LinearRepresentation(Operation.Goto, beginLabel));
 
+            // for initialization
+            forNode.LeftLimit.Accept(this);
+            code.Add(new LinearRepresentation(Operation.LabelOp, beginLabel));
+            ExprNode condition = new BinExprNode(forNode.LeftLimit.Id, BinSign.LS, forNode.RightLimit);
+            
+            branchCondition(condition, forNode.BodyStatement, null, beforeEnd);
         }
         public void Visit(RepUntNode ruNode)
         {
-
+            
         }
         public void Visit(WhileNode whNode)
         {
             Label beginLabel = new Label(s_labelPrefix + labelCounter++);
             code.Add(new LinearRepresentation(Operation.LabelOp, beginLabel));
-            branchCondition(whNode.Condition, whNode.Stat, null, beginLabel);
+            var beforeEnd = new List<LinearRepresentation>();
+            beforeEnd.Add(new LinearRepresentation(Operation.Goto, beginLabel));
+            branchCondition(whNode.Condition, whNode.Stat, null, beforeEnd);
         }
 
         public String toString()
