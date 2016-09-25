@@ -58,6 +58,11 @@ namespace SimpleLang
         Mult,
         Div,
         Less,
+        LessOrEq,
+        Eq,
+        NotEq,
+        Great,
+        GreatOrEq,
         Goto,
         CondGoto,
         LabelOp
@@ -79,6 +84,11 @@ namespace SimpleLang
             { Operation.Mult, "{0} := {1} * {2}" },
             { Operation.Div, "{0} := {1} / {2}" },
             { Operation.Less, "{0} := {1} < {2}" },
+            { Operation.LessOrEq, "{0} := {1} <= {2}" },
+            { Operation.Eq, "{0} := {1} == {2}" },
+            { Operation.NotEq, "{0} := {1} != {2}" },
+            { Operation.Great, "{0} := {1} > {2}" },
+            { Operation.GreatOrEq, "{0} := {1} >= {2}" },
             { Operation.Goto, "goto {0}" },
             { Operation.CondGoto, "if {1} goto {0}" },
             { Operation.LabelOp, "{0}:" }
@@ -120,7 +130,12 @@ namespace SimpleLang
             { BinSign.MINUS, Operation.Minus },
             { BinSign.MULT, Operation.Mult },
             { BinSign.DIV, Operation.Div },
-            { BinSign.LS, Operation.Less }
+            { BinSign.LS, Operation.Less },
+            { BinSign.LE, Operation.LessOrEq },
+            { BinSign.EQ, Operation.Eq },
+            { BinSign.NE, Operation.NotEq },
+            { BinSign.GE, Operation.GreatOrEq },
+            { BinSign.GT, Operation.Great },
         };
 
         private int valueCounter = 0;
