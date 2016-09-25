@@ -227,8 +227,18 @@ namespace SimpleLang
 
             moveExpressionToCode();
         }
-        public void Visit(CycleNode cycNode)
+        public void Visit(CycleNode cycNode) //TODO: implement me
         {
+            /*
+                     t1 := 1
+                l1:  t2 := t1 GT cycNode.Expr
+                     if t2 then goto l3
+                l2:  cycNode.StatementNode
+                     t1 := t1 + 1
+                     goto l1
+                l3:  noop
+            */
+
             // t1:=1
             var varIdent = new Identificator(s_constantPrefix + valueCounter++.ToString());
             code.Add(new LinearRepresentation(Operation.Assign, varIdent, new Number(1)));
@@ -276,8 +286,17 @@ namespace SimpleLang
         }
         public void Visit(RepUntNode ruNode)  //TODO: implement me
         {
-            
+            var beginLabel = new Label(s_labelPrefix + labelCounter++);
+            code.Add(new LinearRepresentation(Operation.LabelOp, beginLabel));
+
+            ruNode.StNode.Accept(this);
+            ruNode.UntilExpr.Accept(this);
+
+            var gotoCond = new LinearRepresentation(Operation.CondGoto, beginLabel, idOrNum);
+            evaluatedExpression.Add(gotoCond);
+            moveExpressionToCode();
         }
+
         public void Visit(WhileNode whNode) 
         {
             Label beginLabel = new Label(s_labelPrefix + labelCounter++);
