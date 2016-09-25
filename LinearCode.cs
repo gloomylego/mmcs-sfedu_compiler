@@ -227,18 +227,8 @@ namespace SimpleLang
 
             moveExpressionToCode();
         }
-        public void Visit(CycleNode cycNode) //TODO: implement me
+        public void Visit(CycleNode cycNode)
         {
-            /*
-                     t1 := 1
-                l1:  t2 := t1 GT cycNode.Expr
-                     if t2 then goto l3
-                l2:  cycNode.StatementNode
-                     t1 := t1 + 1
-                     goto l1
-                l3:  noop
-            */
-
             // t1:=1
             var varIdent = new Identificator(s_constantPrefix + valueCounter++.ToString());
             code.Add(new LinearRepresentation(Operation.Assign, varIdent, new Number(1)));
