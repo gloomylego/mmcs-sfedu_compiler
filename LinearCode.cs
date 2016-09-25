@@ -43,13 +43,6 @@ namespace SimpleLang
         public override string toString() { return label; }
     }
 
-    //LS,
-    //GT,
-    //LE,
-    //GE,
-    //EQ,
-    //NE,
-
     public enum Operation {
         NoOp,
         Assign,
@@ -234,11 +227,38 @@ namespace SimpleLang
 
             moveExpressionToCode();
         }
-        public void Visit(CycleNode cycNode)
+        public void Visit(CycleNode cycNode) //TODO: implement me
         {
-            
+            /*
+                     t1 := 1
+                l1:  t2 := t1 GT cycNode.Expr
+                     if t2 then goto l3
+                l2:  cycNode.StatementNode
+                     t1 := t1 + 1
+                     goto l1
+                l3:  noop
+            */
+
+            // t1:=1
+            var varIdent = new Identificator(s_constantPrefix + valueCounter++.ToString());
+            code.Add(new LinearRepresentation(Operation.Assign, varIdent, new Number(1)));
+
+            // l1:  
+            var conditionLabel = new Label(s_labelPrefix + labelCounter++);
+            code.Add(new LinearRepresentation(Operation.LabelOp, conditionLabel));
+
+            // t2 := t1 GT cycNode.Expr
+            var varIdentNode = new IdNode(varIdent.toString());
+            var condition = new BinExprNode(varIdentNode, BinSign.LE, cycNode.Expr);
+
+            // t1 := t1 + 1
+            var beforeEnd = new List<LinearRepresentation>();
+            beforeEnd.Add(new LinearRepresentation(Operation.Plus, varIdent, varIdent, new Number(1)));
+            beforeEnd.Add(new LinearRepresentation(Operation.Goto, conditionLabel));
+
+            branchCondition(condition, cycNode.Stat, null, beforeEnd);
         }
-        public void Visit(BlockNode blNode)
+        public void Visit(BlockNode blNode) 
         {
             for (var i = 0; i < blNode.StList.Count; ++i)
             {
@@ -264,11 +284,11 @@ namespace SimpleLang
             
             branchCondition(condition, forNode.BodyStatement, null, beforeEnd);
         }
-        public void Visit(RepUntNode ruNode)
+        public void Visit(RepUntNode ruNode)  //TODO: implement me
         {
             
         }
-        public void Visit(WhileNode whNode)
+        public void Visit(WhileNode whNode) 
         {
             Label beginLabel = new Label(s_labelPrefix + labelCounter++);
             code.Add(new LinearRepresentation(Operation.LabelOp, beginLabel));
